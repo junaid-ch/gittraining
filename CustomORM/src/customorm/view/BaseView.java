@@ -12,23 +12,26 @@ import java.util.Scanner;
  * @author junaid.ahmad
  */
 public abstract class BaseView {
-    
+
     Scanner scan = null;
-    
+
     abstract void add();
+
     abstract void delete();
+
     abstract void update();
-    abstract void print();  
-    
-    public void menu(){
+
+    abstract void print();
+
+    public void menu() {
         int option = 0;
         scan = new Scanner(System.in);
-        
+
         System.out.println("1. add");
         System.out.println("2. delete");
         System.out.println("3. update");
         System.out.println("4. view");
-        
+
         option = scan.nextInt();
 
         switch (option) {
@@ -47,6 +50,6 @@ public abstract class BaseView {
             default:
                 break;
         }
-        
-    } 
+
+    }
 }

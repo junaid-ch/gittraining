@@ -10,9 +10,12 @@ package customorm.model;
  * @author junaid.ahmad
  */
 public interface BaseModel {
-    
-    public String getName(); 
-    public void setName(String name);   
-    public int getId();  
-    public void setId(int id);  
+
+    public String getName();
+
+    public void setName(String name);
+
+    public int getId();
+
+    public void setId(int id);
 }

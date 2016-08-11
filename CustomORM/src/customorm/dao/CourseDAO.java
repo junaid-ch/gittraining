@@ -25,27 +25,27 @@ import java.util.logging.Logger;
  *
  * @author junaid.ahmad
  */
-public class CourseDAO implements BaseDAO{
-    
+public class CourseDAO implements BaseDAO {
+
     private Connection conn = null;
     private final DBConfig dBConfig;
     private final ModelFactory modelFactory;
-    
-    public CourseDAO(){
+
+    public CourseDAO() {
         dBConfig = DBConfig.getInstance();
         modelFactory = new ModelFactory();
     }
-    
+
     @Override
     public int insert(BaseModel obj) {
         PreparedStatement preparedStmt = null;
-        Course course = (Course)obj;
+        Course course = (Course) obj;
         StringBuilder query1 = new StringBuilder();
         StringBuilder query2 = new StringBuilder();
         int rowsAffected = 0;
-        
+
         try {
-            if(conn == null){
+            if (conn == null) {
                 conn = dBConfig.configureDB();
             }
             conn.setAutoCommit(false);
@@ -58,9 +58,9 @@ public class CourseDAO implements BaseDAO{
                     + "(TEACHER_ID, COURSE_ID) values (?, ?)";
             String query4 = " insert into student_course "
                     + "(STUDENT_ID, COURSE_ID) values (?, ?)";
-            
+
             // create the mysql insert preparedstatement
-            preparedStmt = conn.prepareStatement(query, 
+            preparedStmt = conn.prepareStatement(query,
                     Statement.RETURN_GENERATED_KEYS);
             preparedStmt.setString(1, course.getName());
             // execute the preparedstatement
@@ -68,14 +68,14 @@ public class CourseDAO implements BaseDAO{
             //getting id of last iserted record
             ResultSet r = preparedStmt.getGeneratedKeys();
             r.next();
-            
-            if(course.getTeachers().get(0).getId() != 0){    //if teacher exist
+
+            if (course.getTeachers().get(0).getId() != 0) {    //if teacher exist
                 //check whether teacher exist or not
-                for(int i = 0; i < course.getTeachers().size(); i++){
+                for (int i = 0; i < course.getTeachers().size(); i++) {
                     query1.append(course.getTeachers()
                             .get(i).getId()).append(",");
                 }
-                query1.deleteCharAt(query1.length() -1);
+                query1.deleteCharAt(query1.length() - 1);
                 query1.append(")");
                 // create the mysql select preparedstatement
                 preparedStmt = conn.prepareStatement(query1.toString());
@@ -86,17 +86,17 @@ public class CourseDAO implements BaseDAO{
                 preparedStmt = conn.prepareStatement(query3);
                 while (rs.next()) {
                     preparedStmt.setInt(1, rs.getInt("id"));
-                    preparedStmt.setInt(2, r.getInt(1)); 
+                    preparedStmt.setInt(2, r.getInt(1));
                     preparedStmt.execute();
                 }
             }
-            if(course.getStudents().get(0).getId() != 0){    //if students exist
+            if (course.getStudents().get(0).getId() != 0) {    //if students exist
                 //check whether studeny exist or not
-                for(int i = 0; i < course.getStudents().size(); i++){
+                for (int i = 0; i < course.getStudents().size(); i++) {
                     query2.append(course.getStudents()
                             .get(i).getId()).append(",");
                 }
-                query2.deleteCharAt(query2.length() -1);
+                query2.deleteCharAt(query2.length() - 1);
                 query2.append(")");
                 // create the mysql select preparedstatement
                 preparedStmt = conn.prepareStatement(query2.toString());
@@ -107,12 +107,12 @@ public class CourseDAO implements BaseDAO{
                 preparedStmt = conn.prepareStatement(query4);
                 while (rs.next()) {
                     preparedStmt.setInt(1, rs.getInt("id"));
-                    preparedStmt.setInt(2, r.getInt(1)); 
+                    preparedStmt.setInt(2, r.getInt(1));
                     preparedStmt.execute();
                 }
             }
             conn.commit();
- 
+
         } catch (SQLException ex) {
             Logger.getLogger(CourseDAO.class.getName()).log(Level.SEVERE, null, ex);
             rowsAffected = 0;
@@ -120,20 +120,20 @@ public class CourseDAO implements BaseDAO{
                 try {
                     System.err.print("Transaction is being rolled back");
                     conn.rollback();
-                } catch(SQLException excep) {
+                } catch (SQLException excep) {
                     excep.printStackTrace();
                 }
             }
-        }finally{
-            try{
-                if(preparedStmt != null){
+        } finally {
+            try {
+                if (preparedStmt != null) {
                     preparedStmt.close();
                 }
-                if(conn!=null){
-                   conn.close();
-                   dBConfig.closeConnection();
+                if (conn != null) {
+                    conn.close();
+                    dBConfig.closeConnection();
                 }
-            }catch(SQLException se){
+            } catch (SQLException se) {
                 se.printStackTrace();
             }//end finally try
         }
@@ -145,17 +145,17 @@ public class CourseDAO implements BaseDAO{
         PreparedStatement preparedStmt = null;
         int rowsAffected = 0;
         try {
-            if(conn == null){
+            if (conn == null) {
                 conn = dBConfig.configureDB();
             }
             conn.setAutoCommit(false);
             // the mysql delete statement
             String query = " delete from course where id = ?";
-            
+
             // create the mysql delete preparedstatement
             preparedStmt = conn.prepareStatement(query);
             preparedStmt.setInt(1, id);
-            
+
             // execute the preparedstatement
             rowsAffected = preparedStmt.executeUpdate();
             conn.commit();
@@ -166,20 +166,20 @@ public class CourseDAO implements BaseDAO{
                 try {
                     System.err.print("Transaction is being rolled back");
                     conn.rollback();
-                } catch(SQLException excep) {
+                } catch (SQLException excep) {
                     excep.printStackTrace();
                 }
             }
-        }finally{
-            try{
-                if(preparedStmt != null){
+        } finally {
+            try {
+                if (preparedStmt != null) {
                     preparedStmt.close();
                 }
-                if(conn!=null){
-                   conn.close();
-                   dBConfig.closeConnection();
+                if (conn != null) {
+                    conn.close();
+                    dBConfig.closeConnection();
                 }
-            }catch(SQLException se){
+            } catch (SQLException se) {
                 se.printStackTrace();
             }//end finally try
         }
@@ -189,22 +189,21 @@ public class CourseDAO implements BaseDAO{
     @Override
     public int update(BaseModel obj) {
         PreparedStatement preparedStmt = null;
-        Course course = (Course)obj;
+        Course course = (Course) obj;
         int rowsAffected = 0;
         try {
-            if(conn == null){
+            if (conn == null) {
                 conn = dBConfig.configureDB();
             }
             conn.setAutoCommit(false);
             // the mysql update statement
             String query = " update course set name = ? where id = ?";
-            
+
             // create the mysql update preparedstatement
             preparedStmt = conn.prepareStatement(query);
             preparedStmt.setString(1, course.getName());
             preparedStmt.setInt(2, course.getId());
-            
-            
+
             // execute the preparedstatement
             rowsAffected = preparedStmt.executeUpdate();
             conn.commit();
@@ -215,21 +214,21 @@ public class CourseDAO implements BaseDAO{
                 try {
                     System.err.print("Transaction is being rolled back");
                     conn.rollback();
-                } catch(SQLException excep) {
+                } catch (SQLException excep) {
                     excep.printStackTrace();
                 }
             }
-        }finally{
-            try{
-                if(preparedStmt != null){
+        } finally {
+            try {
+                if (preparedStmt != null) {
                     preparedStmt.close();
                 }
-                    
-                if(conn!=null){
-                   conn.close();
-                   dBConfig.closeConnection();
+
+                if (conn != null) {
+                    conn.close();
+                    dBConfig.closeConnection();
                 }
-            }catch(SQLException se){
+            } catch (SQLException se) {
                 se.printStackTrace();
             }//end finally try
         }
@@ -238,10 +237,10 @@ public class CourseDAO implements BaseDAO{
 
     @Override
     public BaseModel select(int id) {
-        Course course = (Course)modelFactory.getModel("courseModel");
+        Course course = (Course) modelFactory.getModel("courseModel");
         PreparedStatement preparedStmt = null;
         try {
-            if(conn == null){
+            if (conn == null) {
                 conn = dBConfig.configureDB();
             }
             conn.setAutoCommit(false);
@@ -252,36 +251,35 @@ public class CourseDAO implements BaseDAO{
                     + "left join student_course sc on c.id = sc.course_id "
                     + "left join student s on sc.student_id = s.id "
                     + "where c.id = ?";
-            
+
             // create the mysql select preparedstatement
             preparedStmt = conn.prepareStatement(query);
             preparedStmt.setInt(1, id);
-            
-            
+
             // execute the preparedstatement
             ResultSet rs = preparedStmt.executeQuery();
             conn.commit();
-            if(rs.next()){
+            if (rs.next()) {
                 course.setId(rs.getInt(1));
                 course.setName(rs.getString(2));
                 List<Teacher> tList = new ArrayList<>();
                 List<Student> sList = new ArrayList<>();
-                do{
+                do {
                     Teacher t = new Teacher();
                     t.setId(rs.getInt(3));
                     t.setName(rs.getString(4));
-                    if(!tList.contains(t)){     //ignore repeating objects
+                    if (!tList.contains(t)) {     //ignore repeating objects
                         tList.add(t);
                     }
-                    
+
                     Student s = new Student();
                     s.setId(rs.getInt(5));
                     s.setName(rs.getString(6));
                     s.setAddress(rs.getString(7));
-                    if(!sList.contains(s)){     //ignore repeating objects
+                    if (!sList.contains(s)) {     //ignore repeating objects
                         sList.add(s);
                     }
-                }while(rs.next());
+                } while (rs.next());
                 course.setTeachers(tList);
                 course.setStudents(sList);
             }
@@ -291,23 +289,23 @@ public class CourseDAO implements BaseDAO{
                 try {
                     System.err.print("Transaction is being rolled back");
                     conn.rollback();
-                } catch(SQLException excep) {
+                } catch (SQLException excep) {
                     excep.printStackTrace();
                 }
             }
-        }finally{
-            try{
-                if(preparedStmt != null){
+        } finally {
+            try {
+                if (preparedStmt != null) {
                     preparedStmt.close();
                 }
-                if(conn!=null){
-                   conn.close();
-                   dBConfig.closeConnection();
+                if (conn != null) {
+                    conn.close();
+                    dBConfig.closeConnection();
                 }
-            }catch(SQLException se){
+            } catch (SQLException se) {
                 se.printStackTrace();
             }//end finally try
-        }      
+        }
         return course;
     }
 }

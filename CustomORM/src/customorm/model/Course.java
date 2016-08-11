@@ -13,8 +13,8 @@ import java.util.Objects;
  *
  * @author junaid.ahmad
  */
-public class Course implements BaseModel{
-    
+public class Course implements BaseModel {
+
     private int id;
     private String name;
     private List<Teacher> teachers = new ArrayList();
@@ -82,14 +82,14 @@ public class Course implements BaseModel{
 
     @Override
     public boolean equals(Object obj) {
-        
-        if((obj != null) && (obj instanceof Course) 
-                && (this.id == ((Course)obj).getId()) 
-                && (this.name == null 
-                ? ((Course)obj).getName() == null 
-                : this.name.equals(((Course)obj).getName()))){
+
+        if ((obj != null) && (obj instanceof Course)
+                && (this.id == ((Course) obj).getId())
+                && (this.name == null
+                        ? ((Course) obj).getName() == null
+                        : this.name.equals(((Course) obj).getName()))) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

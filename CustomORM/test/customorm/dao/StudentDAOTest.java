@@ -58,7 +58,7 @@ public class StudentDAOTest {
     }
 
     /**
-     * Test of add method, of class StudentController.
+     * Test of insert method, of class StudentDAO.
      */
     @Test
     public void testInsert() {
@@ -68,7 +68,7 @@ public class StudentDAOTest {
     }
 
     /**
-     * Test of delete method, of class StudentController.
+     * Test of delete method, of class StudentDAO.
      */
     @Test
     public void testDelete() {
@@ -78,7 +78,7 @@ public class StudentDAOTest {
     }
 
     /**
-     * Test of update method, of class StudentController.
+     * Test of update method, of class StudentDAO.
      */
     @Test
     public void testUpdate() {
@@ -88,7 +88,7 @@ public class StudentDAOTest {
     }
 
     /**
-     * Test of print method, of class StudentController.
+     * Test of select method, of class StudentDAO.
      */
     @Test
     public void testSelect() {

@@ -50,7 +50,7 @@ public class CourseDAOTest {
         List<Teacher> tList = new ArrayList<>();
         tList.add(t);
         course.setTeachers(tList);
-        
+
         when(mockedCourseDAO.insert(course)).thenReturn(1);
         when(mockedCourseDAO.select(course.getId())).thenReturn(course);
         when(mockedCourseDAO.delete(course.getId())).thenReturn(1);

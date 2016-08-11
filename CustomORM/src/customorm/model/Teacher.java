@@ -13,13 +13,13 @@ import java.util.Objects;
  *
  * @author junaid.ahmad
  */
+public class Teacher implements BaseModel {
 
-public class Teacher implements BaseModel{
     private int id;
     private String name;
     private List<Student> students = new ArrayList();
     private List<Course> courses = new ArrayList();
-    
+
     /**
      * @return the id
      */
@@ -79,17 +79,17 @@ public class Teacher implements BaseModel{
     public void setCourses(List<Course> courses) {
         this.courses = courses;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        
-        if((obj != null) && (obj instanceof Teacher) 
-                && (this.id == ((Teacher)obj).getId()) 
-                && (this.name == null 
-                ? ((Teacher)obj).getName() == null 
-                : this.name.equals(((Teacher)obj).getName()))){
+
+        if ((obj != null) && (obj instanceof Teacher)
+                && (this.id == ((Teacher) obj).getId())
+                && (this.name == null
+                        ? ((Teacher) obj).getName() == null
+                        : this.name.equals(((Teacher) obj).getName()))) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -102,5 +102,4 @@ public class Teacher implements BaseModel{
         return hash;
     }
 
- 
 }

@@ -14,8 +14,8 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    customorm.dao.StudentDAOTest.class, 
-    customorm.dao.TeacherDAOTest.class, 
+    customorm.dao.StudentDAOTest.class,
+    customorm.dao.TeacherDAOTest.class,
     customorm.dao.CourseDAOTest.class
 })
 public class DAOTestSuite {

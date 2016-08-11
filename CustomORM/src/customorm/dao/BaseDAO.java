@@ -12,8 +12,12 @@ import customorm.model.BaseModel;
  * @author junaid.ahmad
  */
 public interface BaseDAO {
+
     public int insert(BaseModel obj);
+
     public int delete(int id);
+
     public int update(BaseModel obj);
+
     public BaseModel select(int id);
 }

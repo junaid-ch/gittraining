@@ -10,17 +10,17 @@ package customorm.model;
  * @author junaid.ahmad
  */
 public class ModelFactory {
-    
+
     //returns the required model object
-    public BaseModel getModel(String modelName){
-      
-        if(modelName == null){
+    public BaseModel getModel(String modelName) {
+
+        if (modelName == null) {
             return null;
-        }else if(modelName.equalsIgnoreCase("teacherModel")){
+        } else if (modelName.equalsIgnoreCase("teacherModel")) {
             return new Teacher();
-        }else if(modelName.equalsIgnoreCase("studentModel")){
+        } else if (modelName.equalsIgnoreCase("studentModel")) {
             return new Student();
-        }else if(modelName.equalsIgnoreCase("courseModel")){
+        } else if (modelName.equalsIgnoreCase("courseModel")) {
             return new Course();
         }
         return null;

@@ -10,17 +10,17 @@ package customorm.controller;
  * @author junaid.ahmad
  */
 public class ControllerFactory {
-    
+
     //returns the required controller object
-    public BaseController getController(String controllerName){
-      
-        if(controllerName == null){
+    public BaseController getController(String controllerName) {
+
+        if (controllerName == null) {
             return null;
-        }else if(controllerName.equalsIgnoreCase("teacherController")){
+        } else if (controllerName.equalsIgnoreCase("teacherController")) {
             return new TeacherController();
-        }else if(controllerName.equalsIgnoreCase("studentController")){
+        } else if (controllerName.equalsIgnoreCase("studentController")) {
             return new StudentController();
-        }else if(controllerName.equalsIgnoreCase("courseController")){
+        } else if (controllerName.equalsIgnoreCase("courseController")) {
             return new CourseController();
         }
         return null;

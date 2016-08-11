@@ -13,24 +13,23 @@ import java.util.Objects;
  *
  * @author junaid.ahmad
  */
+public class Student implements BaseModel {
 
-public class Student implements BaseModel{
-    
-   private int id;
-   private String name;
-   private String address;
-   private List<Teacher> teachers = new ArrayList();
-   private List<Course> courses = new ArrayList();
-   
-   @Override
-   public String getName() {
-      return name;
-   }
-   
-   @Override
-   public void setName(String name) {
-      this.name = name;
-   }
+    private int id;
+    private String name;
+    private String address;
+    private List<Teacher> teachers = new ArrayList();
+    private List<Course> courses = new ArrayList();
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
 
     /**
      * @return the address
@@ -49,7 +48,7 @@ public class Student implements BaseModel{
     /**
      * @return the id
      */
-   @Override
+    @Override
     public int getId() {
         return id;
     }
@@ -57,7 +56,7 @@ public class Student implements BaseModel{
     /**
      * @param id the id to set
      */
-   @Override
+    @Override
     public void setId(int id) {
         this.id = id;
     }
@@ -75,8 +74,8 @@ public class Student implements BaseModel{
     public void setTeachers(List<Teacher> teachers) {
         this.teachers = teachers;
     }
-    
-     /**
+
+    /**
      * @return the courses
      */
     public List<Course> getCourses() {
@@ -89,20 +88,20 @@ public class Student implements BaseModel{
     public void setCourses(List<Course> courses) {
         this.courses = courses;
     }
-    
-     @Override
+
+    @Override
     public boolean equals(Object obj) {
-        
-        if((obj != null) && (obj instanceof Student) 
-                && (this.id == ((Student)obj).getId()) 
-                && (this.name == null 
-                ? ((Student)obj).getName() == null 
-                : this.name.equals(((Student)obj).getName()))
-                && (this.address == null 
-                ? ((Student)obj).getAddress() == null 
-                : this.address.equals(((Student)obj).getAddress()))){
+
+        if ((obj != null) && (obj instanceof Student)
+                && (this.id == ((Student) obj).getId())
+                && (this.name == null
+                        ? ((Student) obj).getName() == null
+                        : this.name.equals(((Student) obj).getName()))
+                && (this.address == null
+                        ? ((Student) obj).getAddress() == null
+                        : this.address.equals(((Student) obj).getAddress()))) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

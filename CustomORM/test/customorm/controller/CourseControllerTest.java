@@ -21,13 +21,13 @@ import static org.mockito.Mockito.mock;
  * @author junaid.ahmad
  */
 public class CourseControllerTest {
-    
+
     private static Course course;
     private static CourseController mockedCourseController;
-    
+
     public CourseControllerTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
         System.out.println("...COURSE_CONTROLLER...");
@@ -101,5 +101,5 @@ public class CourseControllerTest {
         assertEquals(1, result.getStudents().size());
         assertEquals(1, result.getTeachers().size());
     }
-    
+
 }
