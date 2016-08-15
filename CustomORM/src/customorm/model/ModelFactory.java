@@ -5,6 +5,10 @@
  */
 package customorm.model;
 
+import customorm.controller.ControllerFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author junaid.ahmad
@@ -16,12 +20,13 @@ public class ModelFactory {
 
         if (modelName == null) {
             return null;
-        } else if (modelName.equalsIgnoreCase("teacherModel")) {
-            return new Teacher();
-        } else if (modelName.equalsIgnoreCase("studentModel")) {
-            return new Student();
-        } else if (modelName.equalsIgnoreCase("courseModel")) {
-            return new Course();
+        }
+        try {
+            return (BaseModel) Class
+                    .forName("customorm.model." + modelName)
+                    .newInstance();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(ControllerFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

@@ -5,6 +5,10 @@
  */
 package customorm.dao;
 
+import customorm.controller.ControllerFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author junaid.ahmad
@@ -16,12 +20,13 @@ public class DAOFactory {
 
         if (DAOName == null) {
             return null;
-        } else if (DAOName.equalsIgnoreCase("teacherDAO")) {
-            return new TeacherDAO();
-        } else if (DAOName.equalsIgnoreCase("studentDAO")) {
-            return new StudentDAO();
-        } else if (DAOName.equalsIgnoreCase("courseDAO")) {
-            return new CourseDAO();
+        }
+        try {
+            return (BaseDAO) Class
+                    .forName("customorm.dao." + DAOName)
+                    .newInstance();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(ControllerFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

@@ -5,6 +5,9 @@
  */
 package customorm.controller;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author junaid.ahmad
@@ -16,12 +19,14 @@ public class ControllerFactory {
 
         if (controllerName == null) {
             return null;
-        } else if (controllerName.equalsIgnoreCase("teacherController")) {
-            return new TeacherController();
-        } else if (controllerName.equalsIgnoreCase("studentController")) {
-            return new StudentController();
-        } else if (controllerName.equalsIgnoreCase("courseController")) {
-            return new CourseController();
+        }
+
+        try {
+            return (BaseController) Class
+                    .forName("customorm.controller." + controllerName)
+                    .newInstance();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(ControllerFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
