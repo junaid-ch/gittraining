@@ -5,10 +5,6 @@
  */
 package customorm.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 /**
  *
  * @author junaid.ahmad
@@ -17,8 +13,6 @@ public class Course implements BaseModel {
 
     private int id;
     private String name;
-    private List<Teacher> teachers = new ArrayList();
-    private List<Student> students = new ArrayList();
 
     /**
      * @return the id
@@ -52,53 +46,4 @@ public class Course implements BaseModel {
         this.name = name;
     }
 
-    /**
-     * @return the teachers
-     */
-    public List<Teacher> getTeachers() {
-        return teachers;
-    }
-
-    /**
-     * @param teachers the teachers to set
-     */
-    public void setTeachers(List<Teacher> teachers) {
-        this.teachers = teachers;
-    }
-
-    /**
-     * @return the students
-     */
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    /**
-     * @param students the students to set
-     */
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-
-        if ((obj != null) && (obj instanceof Course)
-                && (this.id == ((Course) obj).getId())
-                && (this.name == null
-                        ? ((Course) obj).getName() == null
-                        : this.name.equals(((Course) obj).getName()))) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 47 * hash + this.id;
-        hash = 47 * hash + Objects.hashCode(this.name);
-        return hash;
-    }
 }

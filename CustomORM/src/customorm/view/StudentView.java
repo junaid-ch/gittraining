@@ -7,9 +7,7 @@ package customorm.view;
 
 import customorm.controller.BaseController;
 import customorm.controller.ControllerFactory;
-import customorm.model.Course;
 import customorm.model.Student;
-import customorm.model.Teacher;
 
 /**
  *
@@ -21,23 +19,9 @@ public class StudentView extends BaseView {
     private final BaseController baseController;
 
     public StudentView() {
+        super("Student");
         controllerFactory = new ControllerFactory();
-        baseController = controllerFactory.getController("studentController");
-    }
-
-    @Override
-    public void add() {
-        baseController.add();
-    }
-
-    @Override
-    public void delete() {
-        baseController.delete();
-    }
-
-    @Override
-    public void update() {
-        baseController.update();
+        baseController = controllerFactory.getController("StudentController");
     }
 
     @Override
@@ -49,24 +33,7 @@ public class StudentView extends BaseView {
             System.out.println("ID: " + student.getId()
                     + "\tName: " + student.getName()
                     + "\tAddress: " + student.getAddress());
-            System.out.println("Realted Teachers: ");
-            if (student.getTeachers().get(0).getId() != 0) {
-                for (Teacher teacher : student.getTeachers()) {
-                    System.out.println("ID: " + teacher.getId()
-                            + "\tName: " + teacher.getName());
-                }
-            } else {
-                System.out.println("No Teacher Found...");
-            }
-            System.out.println("Realted Courses: ");
-            if (student.getCourses().get(0).getId() != 0) {
-                for (Course course : student.getCourses()) {
-                    System.out.println("ID: " + course.getId()
-                            + "\tName: " + course.getName());
-                }
-            } else {
-                System.out.println("No Course Found...");
-            }
+
         } else {
             System.out.println("No Record Found...");
         }

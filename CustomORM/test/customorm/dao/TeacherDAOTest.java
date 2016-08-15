@@ -5,11 +5,7 @@
  */
 package customorm.dao;
 
-import customorm.model.Course;
-import customorm.model.Student;
 import customorm.model.Teacher;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -35,21 +31,6 @@ public class TeacherDAOTest {
         teacher = new Teacher();
         teacher.setId(1);
         teacher.setName("hamza");
-
-        Student s = new Student();
-        s.setId(1);
-        s.setName("ali");
-        s.setAddress("lahore");
-        List<Student> sList = new ArrayList<>();
-        sList.add(s);
-        teacher.setStudents(sList);
-
-        Course c = new Course();
-        c.setId(2);
-        c.setName("oop");
-        List<Course> cList = new ArrayList<>();
-        cList.add(c);
-        teacher.setCourses(cList);
 
         when(mockedTeacherDAO.insert(teacher)).thenReturn(1);
         when(mockedTeacherDAO.select(teacher.getId())).thenReturn(teacher);
@@ -98,8 +79,6 @@ public class TeacherDAOTest {
         assertNotNull(result);
         assertEquals(1, result.getId());
         assertEquals("hamza", result.getName());
-        assertEquals(1, result.getStudents().size());
-        assertEquals(1, result.getCourses().size());
     }
 
 }

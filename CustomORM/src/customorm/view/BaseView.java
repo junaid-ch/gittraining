@@ -5,6 +5,9 @@
  */
 package customorm.view;
 
+import customorm.controller.BaseController;
+import customorm.controller.ControllerFactory;
+import customorm.model.BaseModel;
 import java.util.Scanner;
 
 /**
@@ -13,15 +16,14 @@ import java.util.Scanner;
  */
 public abstract class BaseView {
 
+    private final ControllerFactory controllerFactory;
+    private final BaseController baseController;
     Scanner scan = null;
 
-    abstract void add();
-
-    abstract void delete();
-
-    abstract void update();
-
-    abstract void print();
+    public BaseView(String controllerName) {
+        controllerFactory = new ControllerFactory();
+        baseController = controllerFactory.getController(controllerName + "Controller");
+    }
 
     public void menu() {
         int option = 0;
@@ -50,6 +52,28 @@ public abstract class BaseView {
             default:
                 break;
         }
+    }
 
+    public void add() {
+        baseController.add();
+    }
+
+    public void delete() {
+        baseController.delete();
+    }
+
+    public void update() {
+        baseController.update();
+    }
+
+    public void print() {
+        BaseModel model = baseController.print();
+        if (model.getId() != 0) {
+            System.out.println(model.getClass().getSimpleName());
+            System.out.println("ID: " + model.getId()
+                    + "\tName: " + model.getName());
+        } else {
+            System.out.println("No Record Found...");
+        }
     }
 }

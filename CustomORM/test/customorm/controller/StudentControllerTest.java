@@ -5,11 +5,7 @@
  */
 package customorm.controller;
 
-import customorm.model.Course;
 import customorm.model.Student;
-import customorm.model.Teacher;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -37,20 +33,6 @@ public class StudentControllerTest {
         student.setId(1);
         student.setName("ali");
         student.setAddress("lahore");
-
-        Teacher t = new Teacher();
-        t.setId(1);
-        t.setName("hamza");
-        List<Teacher> tList = new ArrayList<>();
-        tList.add(t);
-        student.setTeachers(tList);
-
-        Course c = new Course();
-        c.setId(2);
-        c.setName("oop");
-        List<Course> cList = new ArrayList<>();
-        cList.add(c);
-        student.setCourses(cList);
 
         when(mockedStudentController.add()).thenReturn(1);
         when(mockedStudentController.print()).thenReturn(student);
@@ -95,14 +77,13 @@ public class StudentControllerTest {
     public void testPrint() {
         System.out.println("print");
 
-        Student result = mockedStudentController.print();
+        Student result = (Student)mockedStudentController.print();
 
         assertNotNull(result);
         assertEquals(1, result.getId());
         assertEquals("ali", result.getName());
         assertEquals("lahore", result.getAddress());
-        assertEquals(1, result.getTeachers().size());
-        assertEquals(1, result.getCourses().size());
+
     }
 
 }
