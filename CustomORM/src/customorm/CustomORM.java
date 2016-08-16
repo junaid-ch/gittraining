@@ -6,10 +6,9 @@
 package customorm;
 
 import customorm.view.BaseView;
-import customorm.view.CourseView;
-import customorm.view.StudentView;
-import customorm.view.TeacherView;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,30 +24,26 @@ public class CustomORM {
 
         BaseView bv;
         Scanner scan = new Scanner(System.in);
-        int option = 0;
+        String[] views = {"Teacher", "Student", "Course"};
+        int option;
 
-        System.out.println("1. Teacher");
-        System.out.println("2. Student");
-        System.out.println("3. Course");
+        System.out.println("1. " + views[0]);
+        System.out.println("2. " + views[1]);
+        System.out.println("3. " + views[2]);
 
         option = scan.nextInt();
 
-        switch (option) {
-            case 1:
-                bv = new TeacherView();
-                break;
-            case 2:
-                bv = new StudentView();
-                break;
-            case 3:
-                bv = new CourseView();
-                break;
-            default:
-                System.out.println("Wrong input....");
-                return;
+        if (option >= 1 || option <= 3) {
+            try {
+                bv = (BaseView) Class
+                        .forName("customorm.view."
+                                + views[option - 1]
+                                + "View")
+                        .newInstance();
+                bv.menu();
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                Logger.getLogger(CustomORM.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        bv.menu();
-
     }
-
 }

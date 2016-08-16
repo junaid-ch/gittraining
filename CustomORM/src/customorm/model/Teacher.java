@@ -9,41 +9,5 @@ package customorm.model;
  *
  * @author junaid.ahmad
  */
-public class Teacher implements BaseModel {
-
-    private int id;
-    private String name;
-
-    /**
-     * @return the id
-     */
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    @Override
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    /**
-     * @return the name
-     */
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
+public class Teacher extends BaseModel {
 }

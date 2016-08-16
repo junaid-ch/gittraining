@@ -55,15 +55,18 @@ public abstract class BaseView {
     }
 
     public void add() {
-        baseController.add();
+        int add = baseController.add();
+        System.out.println("rows affected: " + add);
     }
 
     public void delete() {
-        baseController.delete();
+        int delete = baseController.delete();
+        System.out.println("rows affected: " + delete);
     }
 
     public void update() {
-        baseController.update();
+        int update = baseController.update();
+        System.out.println("rows affected: " + update);
     }
 
     public void print() {

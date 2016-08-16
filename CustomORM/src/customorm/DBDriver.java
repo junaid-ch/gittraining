@@ -16,9 +16,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
@@ -88,7 +85,7 @@ public class DBDriver {
 
         } catch (SQLException | ClassNotFoundException se) {
             //Handle errors for JDBC
-            se.printStackTrace();
+            Logger.getLogger(DBDriver.class.getName()).log(Level.SEVERE, null, se);
         }
 
         return conn;
@@ -96,7 +93,7 @@ public class DBDriver {
 
     public void closeConnection() {
         try {
-            if (conn != null) {
+            if (conn != null || !conn.isClosed()) {
                 this.conn.close();
             }
         } catch (SQLException ex) {

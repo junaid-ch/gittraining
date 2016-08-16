@@ -9,13 +9,36 @@ package customorm.model;
  *
  * @author junaid.ahmad
  */
-public interface BaseModel {
+public abstract class BaseModel {
 
-    public String getName();
+    private int id;
+    private String name;
 
-    public void setName(String name);
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
 
-    public int getId();
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public void setId(int id);
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 }

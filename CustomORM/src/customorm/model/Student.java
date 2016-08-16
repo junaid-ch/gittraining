@@ -9,21 +9,9 @@ package customorm.model;
  *
  * @author junaid.ahmad
  */
-public class Student implements BaseModel {
+public class Student extends BaseModel {
 
-    private int id;
-    private String name;
     private String address;
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
 
     /**
      * @return the address
@@ -38,21 +26,4 @@ public class Student implements BaseModel {
     public void setAddress(String address) {
         this.address = address;
     }
-
-    /**
-     * @return the id
-     */
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    @Override
-    public void setId(int id) {
-        this.id = id;
-    }
-
 }

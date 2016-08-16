@@ -13,7 +13,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,13 +20,14 @@ import java.util.logging.Logger;
  *
  * @author junaid.ahmad
  */
-public class StudentDAO implements BaseDAO {
+public class StudentDAO extends BaseDAO {
 
     private Connection conn = null;
     private final DBDriver dBConfig;
     private final ModelFactory modelFactory;
 
     public StudentDAO() {
+        super("Student");
         dBConfig = DBDriver.getInstance();
         modelFactory = new ModelFactory();
     }
@@ -48,16 +48,11 @@ public class StudentDAO implements BaseDAO {
                     + " values (?, ?)";
 
             // create the mysql insert preparedstatement
-            preparedStmt = conn.prepareStatement(query,
-                    Statement.RETURN_GENERATED_KEYS);
+            preparedStmt = conn.prepareStatement(query);
             preparedStmt.setString(1, student.getName());
             preparedStmt.setString(2, student.getAddress());
             // execute the preparedstatement
             rowsAffected = preparedStmt.executeUpdate();
-            //getting id of last iserted record
-            ResultSet r = preparedStmt.getGeneratedKeys();
-            r.next();
-            student.setId(r.getInt(1));
 
             conn.commit();
 
@@ -69,7 +64,7 @@ public class StudentDAO implements BaseDAO {
                     System.err.print("Transaction is being rolled back");
                     conn.rollback();
                 } catch (SQLException excep) {
-                    excep.printStackTrace();
+                    Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, excep);
                 }
             }
         } finally {
@@ -82,53 +77,7 @@ public class StudentDAO implements BaseDAO {
                     dBConfig.closeConnection();
                 }
             } catch (SQLException se) {
-                se.printStackTrace();
-            }//end finally try
-        }
-        return rowsAffected;
-    }
-
-    @Override
-    public int delete(int id) {
-        PreparedStatement preparedStmt = null;
-        int rowsAffected = 0;
-        try {
-            if (conn == null || conn.isClosed()) {
-                conn = dBConfig.getConnection();
-            }
-            conn.setAutoCommit(false);
-            // the mysql delete statement
-            String query = " delete from student where id = ?";
-
-            // create the mysql delete preparedstatement
-            preparedStmt = conn.prepareStatement(query);
-            preparedStmt.setInt(1, id);
-
-            // execute the preparedstatement
-            rowsAffected = preparedStmt.executeUpdate();
-            conn.commit();
-        } catch (SQLException ex) {
-            Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
-            rowsAffected = 0;
-            if (conn != null) {
-                try {
-                    System.err.print("Transaction is being rolled back");
-                    conn.rollback();
-                } catch (SQLException excep) {
-                    excep.printStackTrace();
-                }
-            }
-        } finally {
-            try {
-                if (preparedStmt != null) {
-                    preparedStmt.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                    dBConfig.closeConnection();
-                }
-            } catch (SQLException se) {
-                se.printStackTrace();
+                Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, se);
             }//end finally try
         }
         return rowsAffected;
@@ -165,7 +114,7 @@ public class StudentDAO implements BaseDAO {
                     System.err.print("Transaction is being rolled back");
                     conn.rollback();
                 } catch (SQLException excep) {
-                    excep.printStackTrace();
+                    Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, excep);
                 }
             }
         } finally {
@@ -179,7 +128,7 @@ public class StudentDAO implements BaseDAO {
                     dBConfig.closeConnection();
                 }
             } catch (SQLException se) {
-                se.printStackTrace();
+                Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, se);
             }//end finally try
         }
         return rowsAffected;
@@ -195,8 +144,8 @@ public class StudentDAO implements BaseDAO {
             }
             conn.setAutoCommit(false);
             // the mysql select statement
-            String query = " select s.* from student s "
-                    + "where s.id = ?";
+            String query = " select * from student "
+                    + "where id = ?";
 
             // create the mysql select preparedstatement
             preparedStmt = conn.prepareStatement(query);
@@ -218,7 +167,7 @@ public class StudentDAO implements BaseDAO {
                     System.err.print("Transaction is being rolled back");
                     conn.rollback();
                 } catch (SQLException excep) {
-                    excep.printStackTrace();
+                    Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, excep);
                 }
             }
         } finally {
@@ -231,7 +180,7 @@ public class StudentDAO implements BaseDAO {
                     dBConfig.closeConnection();
                 }
             } catch (SQLException se) {
-                se.printStackTrace();
+                Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, se);
             }//end finally try
         }
 
