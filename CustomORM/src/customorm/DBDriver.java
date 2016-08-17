@@ -5,18 +5,11 @@
  */
 package customorm;
 
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 /**
  *
@@ -24,49 +17,12 @@ import org.xml.sax.SAXException;
  */
 public class DBDriver {
 
-    // JDBC driver name and database URL
-    private static String JDBC_DRIVER;
-    private static String DB_URL;
-
-    //  Database credentials
-    private static String USER_NAME;
-    private static String PASSWORD;
-
     Connection conn = null;
 
     private DBDriver() {
     }
 
     public static DBDriver getInstance() {
-
-        try {
-            File fXmlFile = new File("DBConfig.xml");
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(fXmlFile);
-
-            doc.getDocumentElement().normalize();
-
-            JDBC_DRIVER = doc
-                    .getElementsByTagName("JDBC_DRIVER")
-                    .item(0)
-                    .getTextContent().trim();
-            DB_URL = doc
-                    .getElementsByTagName("DB_URL")
-                    .item(0)
-                    .getTextContent().trim();
-            USER_NAME = doc
-                    .getElementsByTagName("USER_NAME")
-                    .item(0)
-                    .getTextContent().trim();
-            PASSWORD = doc
-                    .getElementsByTagName("PASSWORD")
-                    .item(0)
-                    .getTextContent().trim();
-
-        } catch (SAXException | IOException | ParserConfigurationException ex) {
-            Logger.getLogger(DBDriver.class.getName()).log(Level.SEVERE, null, ex);
-        }
         return DBDriverHolder.INSTANCE;
     }
 
@@ -78,10 +34,10 @@ public class DBDriver {
             }
 
             //STEP 2: Register JDBC driver
-            Class.forName(JDBC_DRIVER);
+            Class.forName(Configurations.getJDBC_DRIVER());
 
             //STEP 3: Open a connection
-            conn = DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
+            conn = DriverManager.getConnection(Configurations.getDB_URL(), Configurations.getUSER_NAME(), Configurations.getPASSWORD());
 
         } catch (SQLException | ClassNotFoundException se) {
             //Handle errors for JDBC

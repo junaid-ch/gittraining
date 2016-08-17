@@ -6,8 +6,10 @@
 package customorm.dao;
 
 import customorm.DBDriver;
+import customorm.controller.StudentController;
 import customorm.model.BaseModel;
 import customorm.model.ModelFactory;
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,6 +37,7 @@ public abstract class BaseDAO {
     }
 
     public int insert(BaseModel model) {
+
         PreparedStatement preparedStmt = null;
         int rowsAffected = 0;
 
@@ -44,16 +47,53 @@ public abstract class BaseDAO {
             }
             conn.setAutoCommit(false);
             // the mysql insert statement
-            String query = " insert into "
-                    + tableName
-                    + " (name) values (?)";
+            StringBuilder query = new StringBuilder();
+            StringBuilder values = new StringBuilder();
+            query.append("insert into ");
+            query.append(tableName);
+            query.append(" (");
+            values.append("values(");
 
+            for (Class<?> c = model.getClass(); c != null; c = c.getSuperclass()) {
+                Field[] fields = c.getDeclaredFields();
+                for (Field classField : fields) {
+                    if (classField.getName().equalsIgnoreCase("id")) {
+                        continue;
+                    }
+                    query.append(classField.getName()).append(",");
+                    values.append("?,");
+                }
+            }
+            query.deleteCharAt(query.length() - 1);
+            query.append(") ");
+            values.deleteCharAt(values.length() - 1).append(");");
+            query.append(values);
             // create the mysql insert preparedstatement
-            preparedStmt = conn.prepareStatement(query);
-            preparedStmt.setString(1, model.getName());
-            // execute the preparedstatement
-            rowsAffected = preparedStmt.executeUpdate();
+            preparedStmt = conn.prepareStatement(query.toString());
 
+            int i = 1;
+            for (Class<?> c = model.getClass(); c != null; c = c.getSuperclass()) {
+                Field[] fields = c.getDeclaredFields();
+                for (Field classField : fields) {
+
+                    try {
+                        if (classField.getType().isAssignableFrom(java.lang.String.class)) {
+                            preparedStmt.setString(i, (String) model.getField(model, classField));
+                            i++;
+                        } else if (classField.getType().isAssignableFrom(int.class)
+                                && !classField.getName().equalsIgnoreCase("id")) {
+                            preparedStmt.setInt(i, (int) model.getField(model, classField));
+                            i++;
+                        } else if (classField.getType().isAssignableFrom(double.class)) {
+                            preparedStmt.setDouble(i, (double) model.getField(model, classField));
+                            i++;
+                        }
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(StudentController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+            rowsAffected = preparedStmt.executeUpdate();
             conn.commit();
 
         } catch (SQLException ex) {
@@ -92,12 +132,13 @@ public abstract class BaseDAO {
             }
             conn.setAutoCommit(false);
             // the mysql delete statement
-            String query = " delete from "
-                    + tableName
-                    + " where id = ?";
+            StringBuilder query = new StringBuilder();
+            query.append("delete from ")
+                    .append(tableName)
+                    .append(" where id = ?");
 
             // create the mysql delete preparedstatement
-            preparedStmt = conn.prepareStatement(query);
+            preparedStmt = conn.prepareStatement(query.toString());
             preparedStmt.setInt(1, id);
 
             // execute the preparedstatement
@@ -140,15 +181,55 @@ public abstract class BaseDAO {
             }
             conn.setAutoCommit(false);
             // the mysql update statement
-            String query = " update "
-                    + tableName
-                    + " set name = ? where id = ?";
 
-            // create the mysql update preparedstatement
-            preparedStmt = conn.prepareStatement(query);
-            preparedStmt.setString(1, model.getName());
-            preparedStmt.setInt(2, model.getId());
+            StringBuilder query = new StringBuilder();
+            query.append("update ")
+                    .append(tableName)
+                    .append(" set ");
 
+            for (Class<?> c = model.getClass(); c != null; c = c.getSuperclass()) {
+                Field[] fields = c.getDeclaredFields();
+                for (Field classField : fields) {
+                    if (classField.getName().equalsIgnoreCase("id")) {
+                        continue;
+                    }
+                    query.append(classField.getName()).append(" = ? ,");
+                }
+            }
+            query.deleteCharAt(query.length() - 1);
+            query.append(" where id = ? ");
+
+            // create the mysql insert preparedstatement
+            preparedStmt = conn.prepareStatement(query.toString());
+
+            int i = 1;
+            int id = 0;
+            for (Class<?> c = model.getClass(); c != null; c = c.getSuperclass()) {
+                Field[] fields = c.getDeclaredFields();
+                for (Field classField : fields) {
+
+                    try {
+                        if (classField.getType().isAssignableFrom(java.lang.String.class)) {
+                            preparedStmt.setString(i, (String) model.getField(model, classField));
+                            i++;
+                        } else if (classField.getType().isAssignableFrom(int.class)
+                                && classField.getName().equalsIgnoreCase("id")) {
+                            id = (int) model.getField(model, classField);
+                        } else if (classField.getType().isAssignableFrom(int.class)) {
+                            preparedStmt.setInt(i, (int) model.getField(model, classField));
+                            i++;
+                        } else if (classField.getType().isAssignableFrom(double.class)) {
+                            preparedStmt.setDouble(i, (double) model.getField(model, classField));
+                            i++;
+                        }
+
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(StudentController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+
+            preparedStmt.setInt(i, id);
             // execute the preparedstatement
             rowsAffected = preparedStmt.executeUpdate();
             conn.commit();
@@ -178,7 +259,6 @@ public abstract class BaseDAO {
             }//end finally try
         }
         return rowsAffected;
-
     }
 
     public BaseModel select(int id) {
@@ -190,21 +270,38 @@ public abstract class BaseDAO {
             }
             conn.setAutoCommit(false);
             // the mysql select statement
-            String query = " select * from "
-                    + tableName
-                    + " where id = ?";
+            StringBuilder query = new StringBuilder();
+            query.append("Select * from ")
+                    .append(tableName)
+                    .append(" where id = ? ");
 
-            // create the mysql select preparedstatement
-            preparedStmt = conn.prepareStatement(query);
+            // create the mysql insert preparedstatement
+            preparedStmt = conn.prepareStatement(query.toString());
             preparedStmt.setInt(1, id);
 
             // execute the preparedstatement
             ResultSet rs = preparedStmt.executeQuery();
             conn.commit();
-            if (rs.next()) {
-                model.setId(rs.getInt(1));
-                model.setName(rs.getString(2));
+            if (!rs.next()) {
+                return model;
+            }
 
+            for (Class<?> c = model.getClass(); c != null; c = c.getSuperclass()) {
+                Field[] fields = c.getDeclaredFields();
+                for (Field classField : fields) {
+
+                    try {
+                        if (classField.getType().isAssignableFrom(java.lang.String.class)) {
+                            model.setField(model, classField, rs.getString(classField.getName()));
+                        } else if (classField.getType().isAssignableFrom(int.class)) {
+                            model.setField(model, classField, rs.getInt(classField.getName()));
+                        } else if (classField.getType().isAssignableFrom(double.class)) {
+                            model.setField(model, classField, rs.getDouble(classField.getName()));
+                        }
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(StudentController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(BaseDAO.class.getName()).log(Level.SEVERE, null, ex);

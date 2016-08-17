@@ -7,8 +7,19 @@ package customorm.view;
 
 import customorm.controller.BaseController;
 import customorm.controller.ControllerFactory;
+import customorm.controller.StudentController;
 import customorm.model.BaseModel;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.bind.Validator;
 
 /**
  *
@@ -26,31 +37,28 @@ public abstract class BaseView {
     }
 
     public void menu() {
-        int option = 0;
+        int option;
         scan = new Scanner(System.in);
-
-        System.out.println("1. add");
-        System.out.println("2. delete");
-        System.out.println("3. update");
-        System.out.println("4. view");
-
-        option = scan.nextInt();
-
-        switch (option) {
-            case 1:
-                add();
-                break;
-            case 2:
-                delete();
-                break;
-            case 3:
-                update();
-                break;
-            case 4:
-                print();
-                break;
-            default:
-                break;
+        List<String> functionNames = new ArrayList<>();
+        Class<?> clazz = this.getClass().getSuperclass();
+        try {
+            int i = 1;
+            for (Method method : clazz.getDeclaredMethods()) {
+                if (method.getName().equalsIgnoreCase("menu")) {
+                    continue;
+                }
+                functionNames.add(method.getName());
+                System.out.println(i + ". " + method.getName());
+                i++;
+            }
+            option = scan.nextInt();
+            String name = functionNames.get(option - 1);
+            Method m = clazz.getDeclaredMethod(name);
+            m.invoke(this);
+        } catch (SecurityException | IllegalArgumentException e) {
+            throw new IllegalStateException(e);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+            Logger.getLogger(BaseView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -71,12 +79,25 @@ public abstract class BaseView {
 
     public void print() {
         BaseModel model = baseController.print();
+
         if (model.getId() != 0) {
             System.out.println(model.getClass().getSimpleName());
-            System.out.println("ID: " + model.getId()
-                    + "\tName: " + model.getName());
-        } else {
-            System.out.println("No Record Found...");
+            for (Class<?> c = model.getClass(); c != null; c = c.getSuperclass()) {
+                Field[] fields = c.getDeclaredFields();
+                for (Field classField : fields) {
+
+                    try {
+
+                        System.out.println(classField.getName()
+                                + ": "
+                                + model.getField(model, classField));
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(StudentController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }else{
+            System.out.println("no record found...");
         }
     }
 }

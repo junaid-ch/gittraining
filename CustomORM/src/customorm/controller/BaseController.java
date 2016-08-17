@@ -9,7 +9,10 @@ import customorm.dao.BaseDAO;
 import customorm.dao.DAOFactory;
 import customorm.model.BaseModel;
 import customorm.model.ModelFactory;
+import java.lang.reflect.Field;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -35,20 +38,42 @@ public abstract class BaseController {
     public int add() {
         baseModel = modelFactory.getModel(className);
 
-        System.out.print("Name: ");
-        baseModel.setName(scan.next());
+        for (Class<?> c = baseModel.getClass(); c != null; c = c.getSuperclass()) {
+            Field[] fields = c.getDeclaredFields();
+            for (Field classField : fields) {
 
+                try {
+                    if (!classField.getType().isAssignableFrom(int.class)) {
+                        System.out.print(classField.getName() + ": ");
+                        baseModel.setField(baseModel, classField, scan.next());
+                    }
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(StudentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
         return dao.insert(baseModel);
     }
 
     public int update() {
         baseModel = modelFactory.getModel(className);
 
-        System.out.print("ID: ");
-        baseModel.setId(scan.nextInt());
-        System.out.print("Name: ");
-        baseModel.setName(scan.next());
+        for (Class<?> c = baseModel.getClass(); c != null; c = c.getSuperclass()) {
+            Field[] fields = c.getDeclaredFields();
+            for (Field classField : fields) {
 
+                try {
+                    System.out.print(classField.getName() + ": ");
+                    if (classField.getType().isAssignableFrom(int.class)) {
+                        baseModel.setField(baseModel, classField, scan.nextInt());
+                    } else {
+                        baseModel.setField(baseModel, classField, scan.next());
+                    }
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(StudentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
         return dao.update(baseModel);
     }
 
