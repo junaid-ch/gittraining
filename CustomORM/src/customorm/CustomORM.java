@@ -6,9 +6,7 @@
 package customorm;
 
 import customorm.view.BaseView;
-import customorm.view.StudentView;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +21,7 @@ public class CustomORM {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
         Configurations.configure();
         BaseView bv;
         Scanner scan = new Scanner(System.in);
