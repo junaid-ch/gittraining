@@ -22,7 +22,7 @@
             <tr>
                 <td colspan="2">
                     <input type="submit" value="Add" onclick="this.form.action='/CustomORM/add';">
-                    <input type="submit" value="update" onclick="this.form.action='/CustomORM/updateStudent';">
+                    <input type="submit" value="update" onclick="this.form.action='/CustomORM/update';">
                     <input type="submit" value="delete" onclick="this.form.action='/CustomORM/deleteStudent';">
                     <input type="submit" value="view" onclick="this.form.action='/CustomORM/viewStudent';">
                 </td>
