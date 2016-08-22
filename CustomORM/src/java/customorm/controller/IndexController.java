@@ -9,6 +9,7 @@ import customorm.Configurations;
 import customorm.Request;
 import customorm.model.BaseModel;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,25 +35,11 @@ public class IndexController {
         return new ModelAndView("index");
     }
 
-    @RequestMapping("/student")
-    public ModelAndView student() {
+    @RequestMapping(value = "/returnView/{entity}", method = RequestMethod.GET)
+    public ModelAndView returnView(@PathVariable("entity") String entity) {
 
-        Request.setController("StudentController");
-        return new ModelAndView("student", "command", new Request());
-    }
-
-    @RequestMapping("/teacher")
-    public ModelAndView teacher() {
-
-        Request.setController("TeacherController");
-        return new ModelAndView("teacher", "command", new Request());
-    }
-
-    @RequestMapping("/course")
-    public ModelAndView course() {
-
-        Request.setController("CourseController");
-        return new ModelAndView("course", "command", new Request());
+        Request.setController(entity + "Controller");
+        return new ModelAndView(entity.toLowerCase(), "command", new Request());
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
