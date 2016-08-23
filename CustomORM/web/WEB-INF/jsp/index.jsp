@@ -12,9 +12,9 @@
     <body>
         <%! String entity;%>
         <form:form method="GET" action="">
-            <input type="submit" value="Student" onclick="this.form.action = '/CustomORM/returnView/Student';">
-            <input type="submit" value="Teacher" onclick="this.form.action = '/CustomORM/returnView/Teacher';">
-            <input type="submit" value="Course" onclick="this.form.action = '/CustomORM/returnView/Course';">
+            <input type="submit" value="Student" onclick="this.form.action = '/CustomORM/Student';">
+            <input type="submit" value="Teacher" onclick="this.form.action = '/CustomORM/Teacher';">
+            <input type="submit" value="Course" onclick="this.form.action = '/CustomORM/Course';">
         </form:form>
     </body>
 </html>

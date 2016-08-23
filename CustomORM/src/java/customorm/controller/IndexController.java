@@ -35,7 +35,7 @@ public class IndexController {
         return new ModelAndView("index");
     }
 
-    @RequestMapping(value = "/returnView/{entity}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{entity}", method = RequestMethod.GET)
     public ModelAndView returnView(@PathVariable("entity") String entity) {
 
         Request.setController(entity + "Controller");
