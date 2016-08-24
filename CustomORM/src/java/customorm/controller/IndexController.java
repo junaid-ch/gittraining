@@ -6,8 +6,8 @@
 package customorm.controller;
 
 import customorm.Configurations;
-import customorm.Request;
 import customorm.model.BaseModel;
+import customorm.model.ModelFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +23,7 @@ public class IndexController {
 
     private final ControllerFactory controllerFactory;
     private BaseController baseController;
-
+    private String controllerName;
     public IndexController() {
         controllerFactory = new ControllerFactory();
     }
@@ -38,43 +38,43 @@ public class IndexController {
     @RequestMapping(value = "/{entity}", method = RequestMethod.GET)
     public ModelAndView returnView(@PathVariable("entity") String entity) {
 
-        Request.setController(entity + "Controller");
-        return new ModelAndView(entity.toLowerCase(), "command", new Request());
+        controllerName = entity + "Controller";
+        return new ModelAndView(entity.toLowerCase(), "baseModel", new ModelFactory().getModel(entity));
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ModelAndView add(Request request) {
+    public ModelAndView add(BaseModel model) {
 
         baseController = controllerFactory
-                .getController(Request.getController());
-        int rowsAffected = baseController.add(request);
+                .getController(controllerName);
+        int rowsAffected = baseController.add(model);
         return new ModelAndView("result", "model", rowsAffected);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ModelAndView update(Request request) {
+    public ModelAndView update(BaseModel model) {
 
         baseController = controllerFactory
-                .getController(Request.getController());
-        int rowsAffected = baseController.update(request);
+                .getController(controllerName);
+        int rowsAffected = baseController.update(model);
         return new ModelAndView("result", "model", rowsAffected);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public ModelAndView delete(Request request) {
+    public ModelAndView delete(BaseModel model) {
 
         baseController = controllerFactory
-                .getController(Request.getController());
-        int rowsAffected = baseController.delete(request);
+                .getController(controllerName);
+        int rowsAffected = baseController.delete(model);
         return new ModelAndView("result", "model", rowsAffected);
     }
 
     @RequestMapping(value = "/view", method = RequestMethod.POST)
-    public ModelAndView view(Request request) {
+    public ModelAndView view(BaseModel model) {
 
         baseController = controllerFactory
-                .getController(Request.getController());
-        BaseModel baseModel = baseController.print(request);
+                .getController(controllerName);
+        BaseModel baseModel = baseController.print(model);
         return new ModelAndView("result", "model", baseModel);
     }
 
